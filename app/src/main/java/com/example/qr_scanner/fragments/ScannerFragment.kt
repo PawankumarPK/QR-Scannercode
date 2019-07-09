@@ -1,34 +1,44 @@
-package com.example.qr_scanner
+package com.example.qr_scanner.fragments
+
 
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Vibrator
+import android.view.LayoutInflater
 import android.view.SurfaceHolder
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.qr_scanner.R
+import com.example.qr_scanner.adapter.ScannerAdapter
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_scanner.*
 import java.io.IOException
 
-
-class MainActivity : AppCompatActivity() {
+class ScannerFragment : BaseFragment() {
 
     private lateinit var barcodeDetector: BarcodeDetector
     private lateinit var cameraSource: CameraSource
     internal val RequestCameraPermissionID = 1001
+
+    private lateinit var adapter: ScannerAdapter
+    private val list: ArrayList<String> = ArrayList()
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             RequestCameraPermissionID -> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            baseActivity,
+                            Manifest.permission.CAMERA
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
                         return
                     }
                     try {
@@ -42,33 +52,47 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_scanner, container, false)
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setQRcode()
         setCameraSurface()
 
+        mRecyclerView.layoutManager = LinearLayoutManager(baseActivity)
+        mRecyclerView.adapter = adapter
+        adapter = ScannerAdapter()
+
     }
 
     private fun setQRcode() {
-        barcodeDetector = BarcodeDetector.Builder(this).setBarcodeFormats(Barcode.QR_CODE).build()
-        cameraSource = CameraSource.Builder(this, barcodeDetector)
+        barcodeDetector = BarcodeDetector.Builder(baseActivity).setBarcodeFormats(Barcode.QR_CODE).build()
+        cameraSource = CameraSource.Builder(baseActivity, barcodeDetector)
             .setRequestedPreviewSize(640, 480)
             .setAutoFocusEnabled(true)
             .setFacing(CameraSource.CAMERA_FACING_FRONT)
             .build()
     }
 
+
     private fun setCameraSurface() {
 
         cameraPreview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
                 if (ActivityCompat.checkSelfPermission(
-                        applicationContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        baseActivity, Manifest.permission.CAMERA
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
                     //Request permission
-                    ActivityCompat.requestPermissions(this@MainActivity,
-                        arrayOf(Manifest.permission.CAMERA), RequestCameraPermissionID)
+                    ActivityCompat.requestPermissions(
+                        baseActivity,
+                        arrayOf(Manifest.permission.CAMERA), RequestCameraPermissionID
+                    )
                     return
                 }
                 try {
@@ -96,9 +120,16 @@ class MainActivity : AppCompatActivity() {
 
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
                 val qrcodes = detections.detectedItems
+
                 if (qrcodes.size() != 0) {
+
+                    val code = qrcodes.valueAt(0).displayValue
+                    list[code.toInt()]
+                    adapter.notifyDataSetChanged()
+//list.append()
+
                     txtResult.post {
-                        val vibrator = applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                        val vibrator = baseActivity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                         vibrator.vibrate(1000)
                         txtResult.text = qrcodes.valueAt(0).displayValue
                     }
