@@ -27,7 +27,6 @@ class ScannerFragment : BaseFragment() {
     private lateinit var barcodeDetector: BarcodeDetector
     private lateinit var cameraSource: CameraSource
     internal val RequestCameraPermissionID = 1001
-    private var position: Int = 0
 
     private lateinit var adapter: ScannerAdapter
     private val list: ArrayList<String> = ArrayList()
@@ -36,11 +35,7 @@ class ScannerFragment : BaseFragment() {
         when (requestCode) {
             RequestCameraPermissionID -> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(
-                            baseActivity,
-                            Manifest.permission.CAMERA
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
+                    if (ActivityCompat.checkSelfPermission(baseActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         return
                     }
                     try {
@@ -70,9 +65,6 @@ class ScannerFragment : BaseFragment() {
         adapter = ScannerAdapter(list)
         mRecyclerView.adapter = adapter
 
-
-        //listData()
-
     }
 
     private fun setQRcode() {
@@ -90,13 +82,10 @@ class ScannerFragment : BaseFragment() {
         cameraPreview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
                 if (ActivityCompat.checkSelfPermission(
-                        baseActivity, Manifest.permission.CAMERA
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    //Request permission
-                    ActivityCompat.requestPermissions(
-                        baseActivity,
-                        arrayOf(Manifest.permission.CAMERA), RequestCameraPermissionID
+                        baseActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(baseActivity,
+                        arrayOf(Manifest.permission.CAMERA),
+                        RequestCameraPermissionID
                     )
                     return
                 }
@@ -125,15 +114,16 @@ class ScannerFragment : BaseFragment() {
 
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
 
-
                 val qrcodes = detections.detectedItems
 
-
                 val code = qrcodes.valueAt(0).displayValue.toString()
+                mTextview.visibility = View.GONE
                 val vibrator = baseActivity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                vibrator.vibrate(1000)
                 list.add(code)
                 adapter.notifyDataSetChanged()
+                mRecyclerView.smoothScrollToPosition(list.size - 1)
+                vibrator.vibrate(1000)
+
                 try {
                     Thread.sleep(4000)
                 } catch (e: InterruptedException) {
