@@ -21,11 +21,13 @@ import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import java.io.IOException
 
+
 class ScannerFragment : BaseFragment() {
 
     private lateinit var barcodeDetector: BarcodeDetector
     private lateinit var cameraSource: CameraSource
     internal val RequestCameraPermissionID = 1001
+    private var position: Int = 0
 
     private lateinit var adapter: ScannerAdapter
     private val list: ArrayList<String> = ArrayList()
@@ -65,8 +67,11 @@ class ScannerFragment : BaseFragment() {
         setCameraSurface()
 
         mRecyclerView.layoutManager = LinearLayoutManager(baseActivity)
+        adapter = ScannerAdapter(list)
         mRecyclerView.adapter = adapter
-        adapter = ScannerAdapter()
+
+
+        //listData()
 
     }
 
@@ -75,7 +80,7 @@ class ScannerFragment : BaseFragment() {
         cameraSource = CameraSource.Builder(baseActivity, barcodeDetector)
             .setRequestedPreviewSize(640, 480)
             .setAutoFocusEnabled(true)
-            .setFacing(CameraSource.CAMERA_FACING_FRONT)
+            .setFacing(CameraSource.CAMERA_FACING_BACK)
             .build()
     }
 
@@ -119,25 +124,25 @@ class ScannerFragment : BaseFragment() {
             }
 
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
+
+
                 val qrcodes = detections.detectedItems
 
-                if (qrcodes.size() != 0) {
 
-                    val code = qrcodes.valueAt(0).displayValue
-                    list[code.toInt()]
-                    adapter.notifyDataSetChanged()
-//list.append()
-
-                    txtResult.post {
-                        val vibrator = baseActivity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                        vibrator.vibrate(1000)
-                        txtResult.text = qrcodes.valueAt(0).displayValue
-                    }
+                val code = qrcodes.valueAt(0).displayValue.toString()
+                val vibrator = baseActivity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator.vibrate(1000)
+                list.add(code)
+                adapter.notifyDataSetChanged()
+                try {
+                    Thread.sleep(4000)
+                } catch (e: InterruptedException) {
+                    return
                 }
+
             }
         })
     }
-
 
 }
 

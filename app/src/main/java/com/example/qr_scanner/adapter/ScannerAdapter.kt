@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.qr_scanner.R
 import kotlinx.android.synthetic.main.view_holder.view.*
 
-class ScannerAdapter : RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
+class ScannerAdapter(private var dataList: ArrayList<String> ) : RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
 
-    private var dataList: ArrayList<String> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder, parent, false))
