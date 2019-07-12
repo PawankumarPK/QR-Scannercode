@@ -6,7 +6,7 @@ import com.example.qr_scanner.activities.BaseActivity
 
 open class BaseFragment : Fragment() {
 
-     lateinit var baseActivity: BaseActivity
+    lateinit var baseActivity: BaseActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

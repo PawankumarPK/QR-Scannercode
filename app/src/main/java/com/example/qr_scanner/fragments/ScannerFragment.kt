@@ -28,6 +28,7 @@ class ScannerFragment : BaseFragment() {
     private lateinit var cameraSource: CameraSource
     internal val RequestCameraPermissionID = 1001
 
+    private val position: Int = 0
     private lateinit var adapter: ScannerAdapter
     private val list: ArrayList<String> = ArrayList()
 
@@ -64,6 +65,7 @@ class ScannerFragment : BaseFragment() {
         mRecyclerView.layoutManager = LinearLayoutManager(baseActivity)
         adapter = ScannerAdapter(list)
         mRecyclerView.adapter = adapter
+       // adapter.notifyItemRemoved(position)
 
     }
 
@@ -115,19 +117,20 @@ class ScannerFragment : BaseFragment() {
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
 
                 val qrcodes = detections.detectedItems
+                if (qrcodes.size() != 0) {
+                    val code = qrcodes.valueAt(0).displayValue.toString()
+                    mTextview.visibility = View.GONE
+                    val vibrator = baseActivity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                    list.add(code)
+                    adapter.notifyDataSetChanged()
+                    mRecyclerView.smoothScrollToPosition(list.size - 1)
+                    vibrator.vibrate(1000)
 
-                val code = qrcodes.valueAt(0).displayValue.toString()
-                mTextview.visibility = View.GONE
-                val vibrator = baseActivity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                list.add(code)
-                adapter.notifyDataSetChanged()
-                mRecyclerView.smoothScrollToPosition(list.size - 1)
-                vibrator.vibrate(1000)
-
-                try {
-                    Thread.sleep(4000)
-                } catch (e: InterruptedException) {
-                    return
+                    try {
+                        Thread.sleep(4000)
+                    } catch (e: InterruptedException) {
+                        return
+                    }
                 }
 
             }

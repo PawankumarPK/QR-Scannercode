@@ -12,6 +12,7 @@
             android:layout_height="1dp"
             android:background="#fff"/>
 
+
     <ProgressBar
             android:id="@+id/mProgressbar"
             style="?android:attr/progressBarStyleHorizontal"
