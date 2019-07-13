@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qr_scanner.R
@@ -28,7 +29,6 @@ class ScannerFragment : BaseFragment() {
     private lateinit var cameraSource: CameraSource
     internal val RequestCameraPermissionID = 1001
 
-    private val position: Int = 0
     private lateinit var adapter: ScannerAdapter
     private val list: ArrayList<String> = ArrayList()
 
@@ -61,6 +61,12 @@ class ScannerFragment : BaseFragment() {
 
         setQRcode()
         setCameraSurface()
+
+        floatingActionButton.setOnClickListener {
+            list.clear()
+            adapter.notifyDataSetChanged()
+            Toast.makeText(baseActivity,":bfkebrk",Toast.LENGTH_SHORT).show()
+        }
 
         mRecyclerView.layoutManager = LinearLayoutManager(baseActivity)
         adapter = ScannerAdapter(list)
