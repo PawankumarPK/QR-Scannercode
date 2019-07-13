@@ -2,15 +2,17 @@ package com.example.qr_scanner.fragments
 
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Vibrator
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qr_scanner.R
@@ -19,6 +21,7 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import kotlinx.android.synthetic.main.confirmation_dialog.*
 import kotlinx.android.synthetic.main.fragment_scanner.*
 import java.io.IOException
 
@@ -29,6 +32,12 @@ class ScannerFragment : BaseFragment() {
     private lateinit var cameraSource: CameraSource
     internal val RequestCameraPermissionID = 1001
 
+    private val displayRectangle = Rect()
+    private var width = 0
+    private lateinit var metrics: DisplayMetrics
+    private lateinit var dialog: Dialog
+
+
     private lateinit var adapter: ScannerAdapter
     private val list: ArrayList<String> = ArrayList()
 
@@ -36,7 +45,11 @@ class ScannerFragment : BaseFragment() {
         when (requestCode) {
             RequestCameraPermissionID -> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(baseActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(
+                            baseActivity,
+                            Manifest.permission.CAMERA
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
                         return
                     }
                     try {
@@ -59,20 +72,42 @@ class ScannerFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        dialog = Dialog(baseActivity)
+
+        metrics = DisplayMetrics()
+        baseActivity.windowManager.defaultDisplay.getMetrics(metrics)
+        baseActivity.window.decorView.getWindowVisibleDisplayFrame(displayRectangle)
+        width = (displayRectangle.width() * 0.9f).toInt()
+
         setQRcode()
         setCameraSurface()
+        insertAdapter()
+        floatingActionButton.setOnClickListener { mDialog() }
 
-        floatingActionButton.setOnClickListener {
-            list.clear()
-            adapter.notifyDataSetChanged()
-            Toast.makeText(baseActivity,":bfkebrk",Toast.LENGTH_SHORT).show()
-        }
+    }
 
+    private fun clearRecyclerview() {
+        list.clear()
+        adapter.notifyDataSetChanged()
+        mRecyclerView.smoothScrollToPosition(0)
+        mTextview.visibility = View.VISIBLE
+        dialog.dismiss()
+    }
+
+    private fun mDialog() {
+        val layout = LayoutInflater.from(baseActivity).inflate(R.layout.confirmation_dialog, null, false)
+        dialog.setContentView(layout)
+        dialog.mYes.setOnClickListener { clearRecyclerview() }
+        dialog.mDiscard.setOnClickListener { dialog.dismiss() }
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+
+    }
+
+    private fun insertAdapter() {
         mRecyclerView.layoutManager = LinearLayoutManager(baseActivity)
         adapter = ScannerAdapter(list)
         mRecyclerView.adapter = adapter
-       // adapter.notifyItemRemoved(position)
-
     }
 
     private fun setQRcode() {
@@ -90,8 +125,11 @@ class ScannerFragment : BaseFragment() {
         cameraPreview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
                 if (ActivityCompat.checkSelfPermission(
-                        baseActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(baseActivity,
+                        baseActivity, Manifest.permission.CAMERA
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        baseActivity,
                         arrayOf(Manifest.permission.CAMERA),
                         RequestCameraPermissionID
                     )
@@ -142,6 +180,7 @@ class ScannerFragment : BaseFragment() {
             }
         })
     }
+
 
 }
 
