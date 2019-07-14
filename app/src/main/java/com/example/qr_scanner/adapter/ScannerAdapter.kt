@@ -11,6 +11,9 @@ import kotlinx.android.synthetic.main.view_holder.view.*
 
 
 
+
+
+
 class ScannerAdapter(private var dataList: ArrayList<String> ) : RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
 
 
@@ -26,6 +29,7 @@ class ScannerAdapter(private var dataList: ArrayList<String> ) : RecyclerView.Ad
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.bindItems(position)
+
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -35,10 +39,7 @@ class ScannerAdapter(private var dataList: ArrayList<String> ) : RecyclerView.Ad
             itemView.mQRText.text = scanData
             itemView.mCount.text = Integer.toString(pos+1)
             itemView.mDelete.setOnClickListener {
-                if (dataList.size != 0){
                     removeAt(pos)
-                }
-
             }
         }
 
@@ -46,8 +47,9 @@ class ScannerAdapter(private var dataList: ArrayList<String> ) : RecyclerView.Ad
             dataList.removeAt(position)
             notifyItemRemoved(position)
             notifyDataSetChanged()
+            notifyItemRangeChanged(position, dataList.size)
 
-           // dataList.removeAt(position)
+            // dataList.removeAt(position)
         }
     }
 
