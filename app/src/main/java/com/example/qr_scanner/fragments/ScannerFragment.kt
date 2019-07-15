@@ -196,7 +196,7 @@ class ScannerFragment : BaseFragment() {
 
             }
         })
-    }
+    }//upadte code in classes and layouts
 
 }
 
