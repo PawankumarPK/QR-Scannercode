@@ -4,17 +4,15 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qr_scanner.R
+import com.example.qr_scanner.fragments.ScannerFragment
 import kotlinx.android.synthetic.main.view_holder.view.*
 
 
-
-
-
-
-
-class ScannerAdapter(private var dataList: ArrayList<String> ) : RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
+class ScannerAdapter(private var dataList: ArrayList<String>, private val itemClick: ScannerFragment) :
+    RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,23 +32,28 @@ class ScannerAdapter(private var dataList: ArrayList<String> ) : RecyclerView.Ad
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         @SuppressLint("SetTextI18n")
-        fun bindItems(pos : Int) {
+        fun bindItems(pos: Int) {
             val scanData = dataList[pos]
             itemView.mQRText.text = scanData
-            itemView.mCount.text = Integer.toString(pos+1)
+            itemView.mCount.text = Integer.toString(pos + 1)
             itemView.mDelete.setOnClickListener {
-                    removeAt(pos)
+                itemClick.deleteitems(pos)
+                removeAt(pos)
+
             }
         }
 
-        private fun removeAt(position: Int){
+        private fun removeAt(position: Int) {
             dataList.removeAt(position)
             notifyItemRemoved(position)
             notifyDataSetChanged()
-            notifyItemRangeChanged(position, dataList.size)
 
-            // dataList.removeAt(position)
         }
     }
+
+    interface ItemClick {
+        fun deleteitems(position: Int)
+    }
+
 
 }

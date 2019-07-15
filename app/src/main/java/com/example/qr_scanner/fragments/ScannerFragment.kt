@@ -28,7 +28,8 @@ import java.io.IOException
 
 
 @SuppressLint("RestrictedApi")
-class ScannerFragment : BaseFragment() {
+class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
+
 
     private lateinit var barcodeDetector: BarcodeDetector
     private lateinit var cameraSource: CameraSource
@@ -78,7 +79,8 @@ class ScannerFragment : BaseFragment() {
         insertAdapter()
         setQRcode()
         setCameraSurface()
-        floatingActionButton.setOnClickListener { mDialog() }
+
+        floatingActionButton.setOnClickListener { showDialog() }
         floatingActionButton.isEnabled = false
         floatingActionButton.isClickable = false
         floatingActionButton.alpha = 0.3f
@@ -88,9 +90,9 @@ class ScannerFragment : BaseFragment() {
 
     private fun insertAdapter() {
         mRecyclerView.layoutManager = LinearLayoutManager(baseActivity)
-        adapter = ScannerAdapter(list)
+        adapter = ScannerAdapter(list, this)
         mRecyclerView.adapter = adapter
-        //  mRecyclerView.removeViewAt(2);
+
 
     }
 
@@ -105,7 +107,7 @@ class ScannerFragment : BaseFragment() {
         dialog.dismiss()
     }
 
-    private fun mDialog() {
+    private fun showDialog() {
         dialog = Dialog(baseActivity)
         val layout = LayoutInflater.from(baseActivity).inflate(R.layout.confirmation_dialog, null, false)
         dialog.setContentView(layout)
@@ -135,7 +137,6 @@ class ScannerFragment : BaseFragment() {
 
 
     private fun setCameraSurface() {
-
         cameraPreview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
                 if (ActivityCompat.checkSelfPermission(
@@ -196,7 +197,20 @@ class ScannerFragment : BaseFragment() {
 
             }
         })
-    }//upadte code in classes and layouts
+    }
+
+    override fun deleteitems(position: Int) {
+        adapter.notifyDataSetChanged()
+        mRecyclerView.smoothScrollToPosition(0)
+        if (position == 0) {
+            floatingActionButton.isEnabled = false
+            floatingActionButton.isClickable = false
+            floatingActionButton.alpha = 0.3f
+            mTextview.visibility = View.VISIBLE
+            //Toast.makeText(baseActivity, "Empty", Toast.LENGTH_SHORT).show()
+        }
+
+    }
 
 }
 
