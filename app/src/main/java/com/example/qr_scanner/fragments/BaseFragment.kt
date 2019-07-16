@@ -1,6 +1,7 @@
 package com.example.qr_scanner.fragments
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.qr_scanner.activities.BaseActivity
 
@@ -12,5 +13,9 @@ open class BaseFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         baseActivity = activity as BaseActivity
+    }
+
+     fun toast(value : Any){
+        Toast.makeText(baseActivity,value.toString(),Toast.LENGTH_SHORT).show()
     }
 }

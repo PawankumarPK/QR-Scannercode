@@ -2,7 +2,6 @@ package com.example.qr_scanner.fragments
 
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
@@ -27,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_scanner.*
 import java.io.IOException
 
 
-@SuppressLint("RestrictedApi")
 class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
 
 
@@ -81,19 +79,37 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
         setCameraSurface()
 
         floatingActionButton.setOnClickListener { showDialog() }
+        floatingActionButtonSave.setOnClickListener { toast("Save Data") }
+        floatingButtonsDisable()
+
+
+    }
+
+    private fun floatingButtonsDisable() {
         floatingActionButton.isEnabled = false
         floatingActionButton.isClickable = false
         floatingActionButton.alpha = 0.3f
 
+        floatingActionButtonSave.isEnabled = false
+        floatingActionButtonSave.isClickable = false
+        floatingActionButtonSave.alpha = 0.3f
 
+    }
+
+    private fun floatingButtonsEnable() {
+        floatingActionButton.isEnabled = true
+        floatingActionButton.isClickable = true
+        floatingActionButton.alpha = 0.9f
+
+        floatingActionButtonSave.isEnabled = true
+        floatingActionButtonSave.isClickable = true
+        floatingActionButtonSave.alpha = 0.9f
     }
 
     private fun insertAdapter() {
         mRecyclerView.layoutManager = LinearLayoutManager(baseActivity)
         adapter = ScannerAdapter(list, this)
         mRecyclerView.adapter = adapter
-
-
     }
 
     private fun clearRecyclerview() {
@@ -101,9 +117,7 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
         adapter.notifyDataSetChanged()
         mRecyclerView.smoothScrollToPosition(0)
         mTextview.visibility = View.VISIBLE
-        floatingActionButton.isEnabled = false
-        floatingActionButton.isClickable = false
-        floatingActionButton.alpha = 0.3f
+        floatingButtonsDisable()
         dialog.dismiss()
     }
 
@@ -180,12 +194,10 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
                     val code = qrcodes.valueAt(0).displayValue.toString()
                     val vibrator = baseActivity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                     mTextview.visibility = View.GONE
-                    floatingActionButton.isEnabled = true
-                    floatingActionButton.isClickable = true
-                    floatingActionButton.alpha = 0.9f
+                    floatingButtonsEnable()
                     list.add(code)
                     adapter.notifyDataSetChanged()
-                    mRecyclerView.smoothScrollToPosition(0)
+                    mRecyclerView.smoothScrollToPosition(list.size - 1)
                     vibrator.vibrate(1000)
 
                     try {
@@ -203,9 +215,7 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
         adapter.notifyDataSetChanged()
         mRecyclerView.smoothScrollToPosition(0)
         if (position == 0) {
-            floatingActionButton.isEnabled = false
-            floatingActionButton.isClickable = false
-            floatingActionButton.alpha = 0.3f
+            floatingButtonsDisable()
             mTextview.visibility = View.VISIBLE
             //Toast.makeText(baseActivity, "Empty", Toast.LENGTH_SHORT).show()
         }

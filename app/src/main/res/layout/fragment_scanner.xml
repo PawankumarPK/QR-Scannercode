@@ -48,5 +48,14 @@
             android:visibility="visible"
             android:layout_alignParentRight="true"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButtonSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_save"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            android:visibility="visible"/>
+
 
 </RelativeLayout>

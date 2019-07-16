@@ -20,14 +20,11 @@ class ScannerAdapter(private var dataList: ArrayList<String>, private val itemCl
     }
 
     override fun getItemCount(): Int {
-
         return dataList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         holder.bindItems(position)
-
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
