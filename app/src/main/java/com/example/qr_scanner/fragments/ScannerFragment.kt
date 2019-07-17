@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Environment
 import android.os.Vibrator
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -23,11 +24,12 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.confirmation_dialog.*
 import kotlinx.android.synthetic.main.fragment_scanner.*
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
 
 class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
-
 
     private lateinit var barcodeDetector: BarcodeDetector
     private lateinit var cameraSource: CameraSource
@@ -40,6 +42,9 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
 
     private lateinit var adapter: ScannerAdapter
     private val list: ArrayList<String> = ArrayList()
+
+    private var fileName: String = ""
+    private lateinit var pdfFile: File
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
@@ -73,13 +78,18 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        pdfFile = File(activity!!.externalCacheDir!!.path + "/image2pdf.pdf")
+
         addDisplayMatricsForDialog()
         insertAdapter()
         setQRcode()
         setCameraSurface()
 
         floatingActionButton.setOnClickListener { showDialog() }
-        floatingActionButtonSave.setOnClickListener { toast("Save Data") }
+        floatingActionButtonSave.setOnClickListener {
+            saveFile()
+        }
         floatingButtonsDisable()
 
 
@@ -217,10 +227,29 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
         if (position == 0) {
             floatingButtonsDisable()
             mTextview.visibility = View.VISIBLE
-            //Toast.makeText(baseActivity, "Empty", Toast.LENGTH_SHORT).show()
         }
 
     }
+
+    private fun saveFile() {
+        val content = "hello world Pawan kkkkkkk"
+        val outputStream: FileOutputStream
+        val dir = File(Environment.getExternalStorageDirectory().absolutePath, "QRscanner")
+        if (!dir.exists())
+            dir.mkdirs()
+        val file = File(dir, content)
+        toast("Save Data")
+        try {
+
+            outputStream = FileOutputStream(file)
+            outputStream.write(content.toByteArray())
+            outputStream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+    }
+
 
 }
 

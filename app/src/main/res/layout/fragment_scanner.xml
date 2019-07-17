@@ -54,8 +54,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_save"
             android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
-            android:visibility="visible"/>
+            android:layout_margin="20dp"/>
 
 
 </RelativeLayout>
