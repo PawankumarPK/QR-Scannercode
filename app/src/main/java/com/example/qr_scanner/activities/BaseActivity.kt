@@ -3,7 +3,7 @@ package com.example.qr_scanner.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.qr_scanner.R
-import com.example.qr_scanner.fragments.ScannerFragment
+import com.example.qr_scanner.fragments.HomeFragment
 
 
 class BaseActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class BaseActivity : AppCompatActivity() {
 
     private fun loadFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.mFrameContainer, ScannerFragment())
+            .replace(R.id.mFrameContainer, HomeFragment())
             .addToBackStack(null).commit()
     }
 }

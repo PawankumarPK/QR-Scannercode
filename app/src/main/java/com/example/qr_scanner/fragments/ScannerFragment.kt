@@ -7,10 +7,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.graphics.pdf.PdfDocument
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
-import android.os.Vibrator
+import android.os.*
 import android.provider.DocumentsContract
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -48,10 +45,7 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
     private lateinit var adapter: ScannerAdapter
     private val list: ArrayList<String> = ArrayList()
 
-    private lateinit var pageInfo: PdfDocument.PageInfo
     private var pageNo = 0
-    private var fileName: String = ""
-    private lateinit var pdfFile: File
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
@@ -86,7 +80,6 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
         super.onViewCreated(view, savedInstanceState)
 
 
-        pdfFile = File(activity!!.externalCacheDir!!.path + "/image2pdf.pdf")
 
         addDisplayMatricsForDialog()
         insertAdapter()
@@ -98,6 +91,10 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
             saveFile()
         }
         floatingButtonsDisable()
+
+        mBackPress.setOnClickListener {
+            fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer,HomeFragment()).commit()
+        }
 
 
     }

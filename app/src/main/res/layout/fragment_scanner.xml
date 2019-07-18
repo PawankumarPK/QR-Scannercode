@@ -12,6 +12,15 @@
             android:layout_height="1dp"
             android:background="#fff"/>
 
+    <ImageView
+            android:id="@+id/mBackPress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"/>
+
 
     <ProgressBar
             android:id="@+id/mProgressbar"
@@ -19,7 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:indeterminateOnly="true"/>
+            android:indeterminateOnly="true"
+            android:layout_below="@+id/mBackPress"/>
 
     <TextView
             android:id="@+id/mTextview"
