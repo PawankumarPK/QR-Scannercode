@@ -214,10 +214,6 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
                     floatingButtonsEnable()
                     list.add(code)
                     adapter.notifyDataSetChanged()
-
-
-
-
                     mRecyclerView.smoothScrollToPosition(list.size - 1)
                     vibrator.vibrate(1000)
 
@@ -242,10 +238,8 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun saveFile() {
 
-        var document  = PdfDocument()
 
         // val code = qrcodes.valueAt(0).displayValue.toString()
 
@@ -256,22 +250,16 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
             dir.mkdirs()
         val file = File(dir, "list")
 
-        pageInfo = PdfDocument.PageInfo.Builder(595, 842, pageNo).create()
-        val page = document.startPage(pageInfo)
-
         toast("Save Data")
         try {
 
             if (pageNo == list.size) {
                 pageNo++
                 list.add(content)
-                document.finishPage(page)
             }
                 outputStream = FileOutputStream(file)
                 outputStream.write(content.toByteArray())
                 outputStream.close()
-
-
 
         } catch (e: IOException) {
             e.printStackTrace()
