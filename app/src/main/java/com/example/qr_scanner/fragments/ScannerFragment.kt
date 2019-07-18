@@ -6,14 +6,18 @@ import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.graphics.pdf.PdfDocument
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Vibrator
+import android.provider.DocumentsContract
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qr_scanner.R
@@ -24,6 +28,7 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.confirmation_dialog.*
 import kotlinx.android.synthetic.main.fragment_scanner.*
+import org.w3c.dom.DocumentType
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -43,6 +48,8 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
     private lateinit var adapter: ScannerAdapter
     private val list: ArrayList<String> = ArrayList()
 
+    private lateinit var pageInfo: PdfDocument.PageInfo
+    private var pageNo = 0
     private var fileName: String = ""
     private lateinit var pdfFile: File
 
@@ -207,6 +214,10 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
                     floatingButtonsEnable()
                     list.add(code)
                     adapter.notifyDataSetChanged()
+
+
+
+
                     mRecyclerView.smoothScrollToPosition(list.size - 1)
                     vibrator.vibrate(1000)
 
@@ -231,25 +242,42 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun saveFile() {
-        val content = "hello world Pawan kkkkkkk"
+
+        var document  = PdfDocument()
+
+        // val code = qrcodes.valueAt(0).displayValue.toString()
+
+        val content = listOf(list[list.lastIndex]).toString()
         val outputStream: FileOutputStream
         val dir = File(Environment.getExternalStorageDirectory().absolutePath, "QRscanner")
         if (!dir.exists())
             dir.mkdirs()
-        val file = File(dir, content)
+        val file = File(dir, "list")
+
+        pageInfo = PdfDocument.PageInfo.Builder(595, 842, pageNo).create()
+        val page = document.startPage(pageInfo)
+
         toast("Save Data")
         try {
 
-            outputStream = FileOutputStream(file)
-            outputStream.write(content.toByteArray())
-            outputStream.close()
+            if (pageNo == list.size) {
+                pageNo++
+                list.add(content)
+                document.finishPage(page)
+            }
+                outputStream = FileOutputStream(file)
+                outputStream.write(content.toByteArray())
+                outputStream.close()
+
+
+
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
     }
-
 
 }
 
