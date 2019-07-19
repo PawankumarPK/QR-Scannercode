@@ -79,8 +79,6 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         addDisplayMatricsForDialog()
         insertAdapter()
         setQRcode()
@@ -95,8 +93,6 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
         mBackPress.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer,HomeFragment()).commit()
         }
-
-
     }
 
     private fun floatingButtonsDisable() {
