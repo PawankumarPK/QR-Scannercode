@@ -20,6 +20,6 @@ class HomeFragment : BaseFragment() {
 
         mAddCardview.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer, ScannerFragment()).commit()
-        }//check mode
+        }
     }
 }
