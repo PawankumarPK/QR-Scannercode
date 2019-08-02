@@ -234,7 +234,6 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
     private fun saveFile() {
 
 
-        // val code = qrcodes.valueAt(0).displayValue.toString()
 
         val content = listOf(list[list.lastIndex]).toString()
         val outputStream: FileOutputStream
