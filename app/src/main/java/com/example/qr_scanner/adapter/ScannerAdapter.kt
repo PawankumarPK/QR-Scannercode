@@ -51,6 +51,4 @@ class ScannerAdapter(private var dataList: ArrayList<String>, private val itemCl
     interface ItemClick {
         fun deleteitems(position: Int)
     }
-
-
 }

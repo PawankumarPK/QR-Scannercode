@@ -75,7 +75,6 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
 
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -232,9 +231,6 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
     }
 
     private fun saveFile() {
-
-
-
         val content = listOf(list[list.lastIndex]).toString()
         val outputStream: FileOutputStream
         val dir = File(Environment.getExternalStorageDirectory().absolutePath, "QRscanner")
