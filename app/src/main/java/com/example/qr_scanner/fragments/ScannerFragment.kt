@@ -6,15 +6,14 @@ import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Rect
-import android.graphics.pdf.PdfDocument
-import android.os.*
-import android.provider.DocumentsContract
+import android.os.Bundle
+import android.os.Environment
+import android.os.Vibrator
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qr_scanner.R
@@ -25,7 +24,6 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.confirmation_dialog.*
 import kotlinx.android.synthetic.main.fragment_scanner.*
-import org.w3c.dom.DocumentType
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -90,7 +88,7 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
         floatingButtonsDisable()
 
         mBackPress.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer,HomeFragment()).commit()
+            fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer, HomeFragment()).commit()
         }
     }
 
@@ -245,9 +243,9 @@ class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
                 pageNo++
                 list.add(content)
             }
-                outputStream = FileOutputStream(file)
-                outputStream.write(content.toByteArray())
-                outputStream.close()
+            outputStream = FileOutputStream(file)
+            outputStream.write(content.toByteArray())
+            outputStream.close()
 
         } catch (e: IOException) {
             e.printStackTrace()
