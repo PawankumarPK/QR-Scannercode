@@ -4,14 +4,13 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qr_scanner.R
-import com.example.qr_scanner.fragments.ScannerFragment
+import com.example.qr_scanner.fragment.AddStockFragment
 import kotlinx.android.synthetic.main.view_holder.view.*
 
 
-class ScannerAdapter(private var dataList: ArrayList<String>, private val itemClick: ScannerFragment) :
+class ScannerAdapter(private var dataList: ArrayList<String>, private val itemClick: AddStockFragment) :
     RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
 
 

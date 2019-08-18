@@ -1,4 +1,4 @@
-package com.example.qr_scanner.fragments
+package com.example.qr_scanner.fragment
 
 
 import android.os.Bundle
@@ -19,7 +19,7 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mAddCardview.setOnClickListener {
-            fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer, ScannerFragment()).commit()
+            fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer, AddStockFragment()).commit()
         }
     }
 }

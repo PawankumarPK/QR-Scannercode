@@ -1,4 +1,4 @@
-package com.example.qr_scanner.fragments
+package com.example.qr_scanner.fragment
 
 
 import android.Manifest
@@ -29,7 +29,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 
-class ScannerFragment : BaseFragment(), ScannerAdapter.ItemClick {
+class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
 
     private lateinit var barcodeDetector: BarcodeDetector
     private lateinit var cameraSource: CameraSource

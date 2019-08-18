@@ -1,4 +1,4 @@
-package com.example.qr_scanner.activities
+package com.example.qr_scanner.activity
 
 import android.content.Intent
 import android.os.Bundle

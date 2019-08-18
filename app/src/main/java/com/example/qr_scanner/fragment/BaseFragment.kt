@@ -1,9 +1,9 @@
-package com.example.qr_scanner.fragments
+package com.example.qr_scanner.fragment
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.qr_scanner.activities.BaseActivity
+import com.example.qr_scanner.activity.BaseActivity
 
 open class BaseFragment : Fragment() {
 
