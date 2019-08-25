@@ -33,6 +33,7 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
 
     private lateinit var barcodeDetector: BarcodeDetector
     private lateinit var cameraSource: CameraSource
+
     internal val RequestCameraPermissionID = 1001
 
     private val displayRectangle = Rect()

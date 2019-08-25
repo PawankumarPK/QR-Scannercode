@@ -23,7 +23,7 @@ class BaseActivity : AppCompatActivity() {
         INSTANCE = getAppDatabase(applicationContext)
     }
 
-    fun getAppDatabase(context: Context): MyDatabase {
+    private fun getAppDatabase(context: Context): MyDatabase {
         if (INSTANCE == null) {
             synchronized(MyDatabase::class) {
                 INSTANCE = Room.databaseBuilder(context.applicationContext, MyDatabase::class.java, "StockDB")
