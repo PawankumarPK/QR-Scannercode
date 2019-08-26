@@ -23,8 +23,9 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
-import kotlinx.android.synthetic.main.confirmation_dialog.*
+import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.fragment_scanner.*
+import kotlinx.android.synthetic.main.save_alldata_dialog.*
 import java.io.IOException
 
 
@@ -106,10 +107,23 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
     private fun showDialog() {
         dialog = Dialog(baseActivity)
         val layout = LayoutInflater.from(baseActivity)
-            .inflate(R.layout.confirmation_dialog, null, false)
+            .inflate(R.layout.delete_confirmation_dialog, null, false)
         dialog.setContentView(layout)
         dialog.mYes.setOnClickListener { clearRecyclerview() }
         dialog.mDiscard.setOnClickListener { dialog.dismiss() }
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+        
+    }
+    private fun saveAllDialog() {
+        dialog = Dialog(baseActivity)
+        val layout = LayoutInflater.from(baseActivity)
+            .inflate(R.layout.save_alldata_dialog, null, false)
+        dialog.setContentView(layout)
+        dialog.mOK.setOnClickListener {
+            clearRecyclerview()
+            dialog.dismiss()
+        }
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
         
@@ -193,7 +207,7 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
         val stockItems = StockItems()
         stockItems.itemName = "$list"
         BaseActivity.INSTANCE!!.myDao().insertItems(stockItems)
-        toast("Items Add Successfully")
+        saveAllDialog()
     }
     
     override fun deleteitems(position : Int) {
