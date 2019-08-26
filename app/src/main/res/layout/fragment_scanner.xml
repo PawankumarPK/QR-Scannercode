@@ -7,64 +7,64 @@
 
 
     <SurfaceView
-            android:id="@+id/cameraPreview"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#fff"/>
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#fff" />
 
     <ImageView
-            android:id="@+id/mBackPress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"/>
+        android:id="@+id/mBackPress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_arrow" />
 
 
     <ProgressBar
-            android:id="@+id/mProgressbar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:indeterminateOnly="true"
-            android:layout_below="@+id/mBackPress"/>
+        android:id="@+id/mProgressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/mBackPress"
+        android:layout_gravity="center"
+        android:indeterminateOnly="true" />
 
     <TextView
-            android:id="@+id/mTextview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Scanning..."
-            android:layout_centerInParent="true"
-            android:layout_below="@+id/mProgressbar"
-            android:textSize="30sp"
-            android:gravity="center"/>
+        android:id="@+id/mTextview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mProgressbar"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="Scanning..."
+        android:textSize="30sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/mProgressbar"/>
+        android:id="@+id/mRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mProgressbar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete_white"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
-            android:visibility="visible"
-            android:layout_alignParentRight="true"/>
+        android:id="@+id/fabDeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_delete_white"
+        android:visibility="visible" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButtonSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_save"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"/>
-
-
+        android:id="@+id/fabButtonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_save"
+        android:visibility="visible" />
 </RelativeLayout>

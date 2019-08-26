@@ -18,9 +18,9 @@ class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
-
-        loadFragment()
+    
         INSTANCE = getAppDatabase(applicationContext)
+        loadFragment()
     }
 
     private fun getAppDatabase(context: Context): MyDatabase {
@@ -41,5 +41,6 @@ class BaseActivity : AppCompatActivity() {
             .addToBackStack(null).commit()
 
     }
+    
 }
 

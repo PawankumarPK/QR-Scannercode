@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qr_scanner.R
 import com.example.qr_scanner.fragment.AddStockFragment
+import com.example.qr_scanner.room.StockItems
 import kotlinx.android.synthetic.main.view_holder.view.*
 
 
-class ScannerAdapter(private var dataList: ArrayList<String>, private val itemClick: AddStockFragment) :
+class ScannerAdapter( var dataList: ArrayList<String>,  val itemClick: AddStockFragment) :
     RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
 
 
@@ -31,7 +32,7 @@ class ScannerAdapter(private var dataList: ArrayList<String>, private val itemCl
         fun bindItems(pos: Int) {
             val scanData = dataList[pos]
             itemView.mQRText.text = scanData
-            itemView.mCount.text = Integer.toString(pos + 1)
+            itemView.mCount.text = (pos + 1).toString()
             itemView.mDelete.setOnClickListener {
                 itemClick.deleteitems(pos)
                 removeAt(pos)
