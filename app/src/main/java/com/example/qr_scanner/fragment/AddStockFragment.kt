@@ -191,15 +191,7 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
     
     private fun addListOnDB(){
         val stockItems = StockItems()
-        
-        stockItems.itemName = list.toString()
-        
-        
-        /*
-        for (i in 0..itemList.lastIndex){
-            stockItems.itemName = list.addAll()
-        }*/
-        
+        stockItems.itemName = "$list"
         BaseActivity.INSTANCE!!.myDao().insertItems(stockItems)
         toast("Items Add Successfully")
     }
