@@ -5,10 +5,8 @@ import android.Manifest
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Rect
 import android.os.Bundle
 import android.os.Vibrator
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
@@ -24,7 +22,7 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
-import kotlinx.android.synthetic.main.fragment_scanner.*
+import kotlinx.android.synthetic.main.fragment_addstocks.*
 import kotlinx.android.synthetic.main.save_alldata_dialog.*
 import java.io.IOException
 
@@ -34,35 +32,30 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
     private lateinit var barcodeDetector : BarcodeDetector
     private lateinit var cameraSource : CameraSource
     
-    internal val RequestCameraPermissionID = 1001
-    
-    private val displayRectangle = Rect()
-    private var width = 0
-    private lateinit var metrics : DisplayMetrics
     private lateinit var dialog : Dialog
     
     private lateinit var adapter : ScannerAdapter
     private val list : ArrayList<String> = ArrayList()
     
     override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState : Bundle?) : View? {
-        return inflater.inflate(R.layout.fragment_scanner, container, false)
+        return inflater.inflate(R.layout.fragment_addstocks, container, false)
         
     }
     
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        addDisplayMatricsForDialog()
         insertAdapter()
         setQRcode()
         setCameraSurface()
     
-        fabDeleteButton.setOnClickListener { showDialog() }
+        fabDeleteButton.setOnClickListener { deleteAllDialog() }
         fabButtonSave.setOnClickListener { addListOnDB() }
         floatingButtonsDisable()
         
         mBackPress.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer, HomeFragment())
+                .addToBackStack(null)
                 .commit()
         }
     }
@@ -104,7 +97,7 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
         dialog.dismiss()
     }
     
-    private fun showDialog() {
+    private fun deleteAllDialog() {
         dialog = Dialog(baseActivity)
         val layout = LayoutInflater.from(baseActivity)
             .inflate(R.layout.delete_confirmation_dialog, null, false)
@@ -129,14 +122,6 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
         
     }
     
-    private fun addDisplayMatricsForDialog() {
-        metrics = DisplayMetrics()
-        baseActivity.windowManager.defaultDisplay.getMetrics(metrics)
-        baseActivity.window.decorView.getWindowVisibleDisplayFrame(displayRectangle)
-        width = (displayRectangle.width() * 0.9f).toInt()
-        
-    }
-    
     private fun setQRcode() {
         barcodeDetector = BarcodeDetector.Builder(baseActivity).setBarcodeFormats(Barcode.QR_CODE)
             .build()
@@ -151,10 +136,7 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
                 if (ActivityCompat.checkSelfPermission(
                         baseActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                 {
-                    ActivityCompat.requestPermissions(
-                        baseActivity,
-                        arrayOf(Manifest.permission.CAMERA),
-                        RequestCameraPermissionID)
+                    ActivityCompat.requestPermissions(baseActivity, arrayOf(Manifest.permission.CAMERA), baseActivity.RequestCameraPermissionID)
                     return
                 }
                 try {
@@ -205,7 +187,8 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
     
     private fun addListOnDB(){
         val stockItems = StockItems()
-        stockItems.itemName = "$list"
+       
+        stockItems.itemName = list.toString()
         BaseActivity.INSTANCE!!.myDao().insertItems(stockItems)
         saveAllDialog()
     }
@@ -219,27 +202,5 @@ class AddStockFragment : BaseFragment(), ScannerAdapter.ItemClick {
         }
         
     }
-    
-    override fun onRequestPermissionsResult(requestCode : Int, permissions : Array<String>, grantResults : IntArray) {
-        when (requestCode) {
-            RequestCameraPermissionID -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(
-                            baseActivity, Manifest.permission.CAMERA
-                                                          ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        return
-                    }
-                    try {
-                        cameraSource.start(cameraPreview.holder)
-                    } catch (e : IOException) {
-                        e.printStackTrace()
-                    }
-                    
-                }
-            }
-        }
-    }
-    
 }
 
