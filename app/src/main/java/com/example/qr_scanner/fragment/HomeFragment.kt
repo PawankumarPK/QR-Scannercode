@@ -17,9 +17,13 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+    
         mAddCardview.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer, AddStockFragment()).commit()
         }
+        mRemoveStocks.setOnClickListener {
+            fragmentManager!!.beginTransaction().replace(R.id.mFrameContainer, RemoveStockFragment()).commit()
+        }
+        
     }
 }

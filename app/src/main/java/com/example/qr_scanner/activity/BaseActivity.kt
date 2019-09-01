@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Rect
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
@@ -13,9 +12,6 @@ import androidx.room.Room
 import com.example.qr_scanner.R
 import com.example.qr_scanner.fragment.HomeFragment
 import com.example.qr_scanner.room.MyDatabase
-import com.google.android.gms.vision.CameraSource
-import kotlinx.android.synthetic.main.fragment_addstocks.*
-import java.io.IOException
 
 
 class BaseActivity : AppCompatActivity() {
@@ -27,13 +23,13 @@ class BaseActivity : AppCompatActivity() {
     
     
     companion object {
-        var INSTANCE: MyDatabase? = null
+        var INSTANCE : MyDatabase? = null
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+    
+    override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
-    
+        
         INSTANCE = getAppDatabase(applicationContext)
         //addDisplayMatricsForDialog()
         loadFragment()
@@ -44,8 +40,9 @@ class BaseActivity : AppCompatActivity() {
             RequestCameraPermissionID -> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.checkSelfPermission(
-                            this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                    {
+                            this, Manifest.permission.CAMERA
+                                                          ) != PackageManager.PERMISSION_GRANTED
+                    ) {
                         return
                     }
                 }
@@ -53,23 +50,24 @@ class BaseActivity : AppCompatActivity() {
         }
     }
     
-    private fun getAppDatabase(context: Context): MyDatabase {
-        if (INSTANCE == null) {
-            synchronized(MyDatabase::class) {
-                INSTANCE = Room.databaseBuilder(context.applicationContext, MyDatabase::class.java, "StockDB")
-                    .allowMainThreadQueries()
-                    .build()
+    private fun getAppDatabase(context : Context) : MyDatabase {
+        
+        Thread {
+            if (INSTANCE == null) {
+                synchronized(MyDatabase::class) {
+                    INSTANCE = Room.databaseBuilder(
+                        context.applicationContext, MyDatabase::class.java, "StockDB")
+                        .allowMainThreadQueries().build()
+                }
             }
+            
         }
-
         return INSTANCE!!
+        
     }
-
+    
     private fun loadFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.mFrameContainer, HomeFragment())
-            .addToBackStack(null).commit()
-
+        supportFragmentManager.beginTransaction().replace(R.id.mFrameContainer, HomeFragment()).addToBackStack(null).commit()
     }
     
 }
